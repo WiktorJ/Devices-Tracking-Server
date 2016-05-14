@@ -6,7 +6,7 @@ var router = express.Router();
 router.post('/update', function(req, res, next) {
   //TODO: After auth implementing change this mock
   var uid = 0;
-  locationService.addLocation(uid, req.data);
+  locationService.addLocation(uid, req.body);
   res.status(200).send();
 });
 
@@ -15,8 +15,7 @@ router.get('/keepAlive', function (req, res, next) {
 });
 
 router.get('/isAlive', function (req, res, next) {
-  res.statusCode = 200;
-  res.send()
+  res.status(200).send()
 });
 
 module.exports = router;

@@ -15,10 +15,5 @@ var utils = {};
 utils.getDb = function () {
         return db;
     };
-    
-utils.getCollection = function (name) {
-        return db.collection(name)
-    };
-
 
 module.exports = utils;
