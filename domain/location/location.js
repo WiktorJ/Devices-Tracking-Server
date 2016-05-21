@@ -16,7 +16,11 @@ location.addLocation = function (uid, locObj) {
         })
 };
 
-location.updateLastLocation = function (uid, timeStamp) {
-    console.log(util.getDb().collection(config.locationCollection + uid).find().limit(1).sort({$natural:-1}))
+location.setStopOnLastLocation = function (uid) {
+    var last = util.getDb().collection(config.locationCollection + uid).find().limit(1).sort({$natural:-1});
+    console.log("LAST LOCATION: ", last);
+    last.timestamp = last.timestamp + config.cacheOpt.stdTTL;
+    last.stop = true;
+    this.addLocation(uid, last);
 };
 module.exports = location;
