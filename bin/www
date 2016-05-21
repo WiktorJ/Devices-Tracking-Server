@@ -21,11 +21,32 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+var io = require("socket.io")(server);
+
+//TODO: After auth implementing change this mock
+var uid = 0;
+
+io.on('connection', function (socket) {
+  console.log("CONNECTION!");
+  socket.on('update', function (data) {
+    console.log("IN UPDATE");
+    locationService.addLocation(uid, data);
+  });
+
+  socket.on('keepAlive', function (data) {
+    console.log("IN KEEP ALIVE");
+  })
+});
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
+
+
+
+
 server.on('error', onError);
 server.on('listening', onListening);
 
