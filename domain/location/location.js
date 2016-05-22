@@ -12,7 +12,7 @@ location.addLocation = function (uid, locObj) {
             if (err) {
                 console.error("Error while inserting to collection, uid: ", uid, err);
             } else {
-                console.log("Inserting success ", locObj);
+                console.log("Inserting success");
             }
         })
 };
