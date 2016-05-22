@@ -48,7 +48,11 @@ module.exports = function (wss) {
                     locationService.addLocation(uid, request.data);
                     clientActivenessCache.set(uid, new CacheEntry(request.data.timestamp, request.data._id));
                     if (request.data.stop) {
-                        clientActivenessCache.del(uid)
+                        console.log("Deleting old key");
+                        var removedCount = clientActivenessCache.del([uid]);
+                        if(removedCount != 1) {
+                            console.error("Removed " + removedCount + " entries from cache instead of 1")
+                        }
                     }
                 }
             } catch (ex) {

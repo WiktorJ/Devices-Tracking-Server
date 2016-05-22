@@ -18,7 +18,7 @@ location.addLocation = function (uid, locObj) {
 };
 
 location.updateTimeStamp = function (uid, cacheEntry) {
-    util.getDb().collection(config.locationCollection + uid).find(cacheEntry.id).updateOne({$set: {timestamp: cacheEntry.timestamp}})
+    util.getDb().collection(config.locationCollection + uid).updateOne({_id: cacheEntry.id}, {$set: {timestamp: cacheEntry.timestamp}})
 };
 
 location.setStopOnLastLocation = function (uid, cacheEntry) {
