@@ -30,7 +30,7 @@ module.exports = function (wss) {
     });
 
     wss.on('connection', function (socket) {
-        clientActivenessCache.set(uid, new CacheEntry(-1, -1), cacheSetErrorCallback);
+        clientActivenessCache.set(uid, new CacheEntry(9999, 9999), cacheSetErrorCallback);
         socket.on('message', function (data, flags) {
             try {
                 var request = JSON.parse(data);

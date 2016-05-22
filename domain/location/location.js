@@ -33,6 +33,15 @@ location.setStopOnLastLocation = function (uid, cacheEntry) {
             that.addLocation(uid, result);
         }
     });
+};
 
+location.getUserLocation = function (uid, from, to) {
+    var userColl = util.getDb().collection(config.locationCollection + uid);
+    if (!userColl) {
+        console.log("No collection for user with id ", uid);
+        return false
+    } else {
+        return userColl.find({timestamp : {$gt: (from ? parseInt(from) : 0), $lt: (to ? parseInt(to) : 99999999999999)}}).toArray()
+    }
 };
 module.exports = location;
