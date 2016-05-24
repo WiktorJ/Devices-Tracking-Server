@@ -6,7 +6,7 @@
   },
   "main": "bin/www.js",
   "scripts": {
-    "start": "node ./bin/www.js "
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,6 @@
     "morgan": "~1.6.1",
     "node-cache": "^3.2.1",
     "serve-favicon": "~2.3.0",
-    "ws": "0.4.x"
+    "ws": "^0.4.32"
   }
 }
