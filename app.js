@@ -9,13 +9,12 @@ var bodyParser = require('body-parser');
 var location = require('./domain/location/index');
 var users = require('./domain/users/index');
 var auth = require('./auth/index');
-var GoogleAuth = require('google-auth-library');
+var config = require(path.join(__base, 'config/index'));
+var utils = require(path.join(__base, 'utils/index'));
 
 var app = express();
 
-var authFactory = new GoogleAuth();
 
-var oauth = new authFactory.OAuth2("583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com", "kSWATwglcCMwghSyRlUBM0Ml");
 
 
 // add response headers, which allow to communicate between different hosts.
@@ -41,16 +40,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
     var token = req.headers.authorization;
-    if(!token)
-        token = "SOME FAKE TOKEN";
-    oauth.verifyIdToken(token, "583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com", function (err, login) {
-        if(err) {
-            console.log("ERROR VERIFING TOKEN", err)
-        } else {
-            console.log("VERYFING GUT", login)
-        }
-    });
-    next()
+    if(utils.verifyToken(token)) {
+        next()
+    } else {
+        res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+    }
 });
 
 // additional custom scripts

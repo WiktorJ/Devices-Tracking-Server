@@ -9,5 +9,9 @@ config.cacheOpt = {
     stdTTL: 12,
     checkperiod: 12
 };
+config.googleSignIn = {
+    clientId: "583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com",
+    clientSecret: "kSWATwglcCMwghSyRlUBM0Ml"  
+};
 
 module.exports = config;

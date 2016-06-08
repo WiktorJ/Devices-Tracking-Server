@@ -34,6 +34,7 @@ module.exports = function (wss) {
         socket.on('message', function (data, flags) {
             try {
                 var request = JSON.parse(data);
+                console.log("AUTH:", request.authentication);
                 var lastCacheEntry = clientActivenessCache.get(uid);
                 if (lastCacheEntry == undefined) {
                     console.error("Trying to update data of unlogged user. This is a sign of very serious consistency problem")
