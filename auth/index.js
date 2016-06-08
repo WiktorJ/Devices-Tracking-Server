@@ -8,7 +8,7 @@ var express = require('express');
 var config = require(path.join(__base, 'config/index'));
 var router = express.Router();
 
-router.get('/login', function (req, res, next) {
+router.post('/login', function (req, res, next) {
     console.log('received login request');
     console.log(req);
     res.status(200).send()
