@@ -10,8 +10,7 @@ var router = express.Router();
 
 router.post('/login', function (req, res, next) {
     console.log('received login request');
-    console.log(req);
-    res.status(200).send("SOME STRING")
+    res.status(200).send("\"{}\"")
 });
 
 module.exports = router;

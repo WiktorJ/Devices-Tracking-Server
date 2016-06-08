@@ -40,10 +40,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 // app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
-    var token = req.body.Authorization;
+    var token = req.headers.authorization;
     if(!token)
         token = "SOME FAKE TOKEN";
-    oauth.verifyIdToken(token, "", function (err, login) {
+    oauth.verifyIdToken(token, "583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com", function (err, login) {
         if(err) {
             console.log("ERROR VERIFING TOKEN", err)
         } else {
