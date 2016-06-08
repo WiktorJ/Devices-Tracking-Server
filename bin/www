@@ -13,6 +13,8 @@ var WebSocketServer = require('ws').Server;
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+
+process.env.GOOGLE_APPLICATION_CREDENTIALS = '/home/wiktor/Studies/TAI/Simple-Device-Tracking-System-d68520092ec1.json';
 app.set('port', port);
 
 /**

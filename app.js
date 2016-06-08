@@ -9,8 +9,13 @@ var bodyParser = require('body-parser');
 var location = require('./domain/location/index');
 var users = require('./domain/users/index');
 var auth = require('./auth/index');
+var GoogleAuth = require('google-auth-library');
 
 var app = express();
+
+var authFactory = new GoogleAuth();
+
+var oauth = new authFactory.OAuth2("583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com", "kSWATwglcCMwghSyRlUBM0Ml");
 
 
 // add response headers, which allow to communicate between different hosts.
@@ -34,7 +39,19 @@ app.use(bodyParser.urlencoded({extended: false}));
 // app.use(cookieParser());
 // app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(function (req, res, next) {
+    var token = req.body.Authorization;
+    if(!token)
+        token = "SOME FAKE TOKEN";
+    oauth.verifyIdToken(token, "", function (err, login) {
+        if(err) {
+            console.log("ERROR VERIFING TOKEN", err)
+        } else {
+            console.log("VERYFING GUT", login)
+        }
+    });
+    next()
+});
 
 // additional custom scripts
 app.use('/auth', auth);
