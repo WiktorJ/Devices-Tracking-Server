@@ -23,6 +23,7 @@ module.exports = function (wss) {
     //FIXME: This should be retrieved from session
     var uid = 0;
 
+
     var clientActivenessCache = new NodeCache(config.cacheOpt);
     clientActivenessCache.on("expired", function (key, value) {
         console.log("Removing old key");
@@ -30,11 +31,11 @@ module.exports = function (wss) {
     });
 
     wss.on('connection', function (socket) {
+        console.log("socket connecting");
         clientActivenessCache.set(uid, new CacheEntry(9999, 9999), cacheSetErrorCallback);
         socket.on('message', function (data, flags) {
             try {
                 var request = JSON.parse(data);
-                console.log("AUTH:", request.authentication);
                 var lastCacheEntry = clientActivenessCache.get(uid);
                 if (lastCacheEntry == undefined) {
                     console.error("Trying to update data of unlogged user. This is a sign of very serious consistency problem")

@@ -15,10 +15,8 @@ var utils = require(path.join(__base, 'utils/index'));
 var app = express();
 
 
-
-
 // add response headers, which allow to communicate between different hosts.
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -40,11 +38,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
     var token = req.headers.authorization;
-    if(utils.verifyToken(token)) {
-        next()
-    } else {
-        res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
-    }
+    utils.verifyToken(token, function (success, data) {
+        if (success) {
+            next()
+        } else {
+            res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+        }
+    });
 });
 
 // additional custom scripts
