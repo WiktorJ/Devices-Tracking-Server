@@ -6,6 +6,7 @@ var express = require('express');
 var locationService = require('./location');
 var config = require(path.join(__base, 'config/index'));
 var NodeCache = require("node-cache");
+var utils = require(path.join(__base, 'utils/index'));
 
 var cacheSetErrorCallback = function (err, success) {
     if (err) {
@@ -39,23 +40,31 @@ module.exports = function (wss) {
                 var lastCacheEntry = clientActivenessCache.get(uid);
                 if (lastCacheEntry == undefined) {
                     console.error("Trying to update data of unlogged user. This is a sign of very serious consistency problem")
-                }
-                else if (request.type == 'keepAlive') {
-                    console.log("Received keep alive", request);
-                    locationService.updateTimeStamp(uid, lastCacheEntry);
-                    lastCacheEntry.timestamp = request.data.timestamp;
-                    clientActivenessCache.set(uid, lastCacheEntry, cacheSetErrorCallback)
-                } else if (request.type == 'update') {
-                    console.log("Received update", request);
-                    locationService.addLocation(uid, request.data);
-                    clientActivenessCache.set(uid, new CacheEntry(request.data.timestamp, request.data._id));
-                    if (request.data.stop) {
-                        console.log("Deleting old key");
-                        var removedCount = clientActivenessCache.del([uid]);
-                        if(removedCount != 1) {
-                            console.error("Removed " + removedCount + " entries from cache instead of 1")
+                } else {
+                    utils.verifyToken(request.authentication, function (success, data) {
+                    if(success) {
+                        if (request.type == 'keepAlive') {
+                            console.log("Received keep alive");
+                            locationService.updateTimeStamp(uid, lastCacheEntry);
+                            lastCacheEntry.timestamp = request.data.timestamp;
+                            clientActivenessCache.set(uid, lastCacheEntry, cacheSetErrorCallback)
+                        } else if (request.type == 'update') {
+                            console.log("Received update");
+                            locationService.addLocation(uid, request.data);
+                            clientActivenessCache.set(uid, new CacheEntry(request.data.timestamp, request.data._id));
+                            if (request.data.stop) {
+                                console.log("Deleting old key");
+                                var removedCount = clientActivenessCache.del([uid]);
+                                if (removedCount != 1) {
+                                    console.error("Removed " + removedCount + " entries from cache instead of 1")
+                                }
+                            }
                         }
+                    } else {
+                        //TODO: This should be handled somehow
+                        console.error("AUTHENTICATION ERROR IN WEBSOCKET REQUEST");
                     }
+                    });
                 }
             } catch (ex) {
                 console.log("Error while processing webSocket message", ex)
