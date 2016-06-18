@@ -33,6 +33,7 @@ uid.mapEmail = function (email, fn) {
             if(err) {
                 console.log("Error while finding in collection for user: " + email + ". ", err);
                 fn(-1);
+                return;
             }
         
             if(result.length == 0) {
