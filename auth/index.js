@@ -17,7 +17,7 @@ router.post('/login', function (req, res, next) {
             res.status(500).send("\"{\"reason\": \"Unable to map e-mail to UID.\"}\"")
         }
         else {
-            res.status(200).send({"uid": uid});
+            res.status(200).send({uid: uid});
         }
     });
 });
