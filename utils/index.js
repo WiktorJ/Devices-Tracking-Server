@@ -9,7 +9,7 @@ var oauth = new authFactory.OAuth2(config.googleSignIn.clientId, config.googleSi
 
 var util = {};
 
-util.verifyToken = function (token, callback) {
+    util.verifyToken = function (token, callback) {
     oauth.verifyIdToken(token, config.googleSignIn.clientId, function (err, login) {
         if(err) {
             console.log("ERROR VERIFING TOKEN", err);

@@ -11,10 +11,10 @@ config.cacheOpt = {
     checkperiod: 12
 };
 config.googleSignIn = {
-    // clientId: "583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com",
-    // clientSecret: "kSWATwglcCMwghSyRlUBM0Ml"
-    clientId: "515631213938-2cu7dq3pmo6ms54ffrtijlr02ooh1rau.apps.googleusercontent.com",
-    clientSecret: "wkzKMFt6I4mChKGavV79UV16"
+    clientId: "583088429615-npskj15ed319bim2k7a43ied661hm3jq.apps.googleusercontent.com",
+    clientSecret: "kSWATwglcCMwghSyRlUBM0Ml"
+    // clientId: "515631213938-2cu7dq3pmo6ms54ffrtijlr02ooh1rau.apps.googleusercontent.com",
+    // clientSecret: "wkzKMFt6I4mChKGavV79UV16"
 };
 
 module.exports = config;

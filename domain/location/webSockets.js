@@ -21,9 +21,6 @@ function CacheEntry(timestamp, id) {
 }
 
 module.exports = function (wss) {
-    //FIXME: This should be retrieved from session
-    var uid = 0;
-
 
     var clientActivenessCache = new NodeCache(config.cacheOpt);
     clientActivenessCache.on("expired", function (key, value) {
@@ -33,15 +30,19 @@ module.exports = function (wss) {
 
     wss.on('connection', function (socket) {
         console.log("socket connecting");
-        clientActivenessCache.set(uid, new CacheEntry(9999, 9999), cacheSetErrorCallback);
         socket.on('message', function (data, flags) {
             try {
                 var request = JSON.parse(data);
+                //todo: this should not be handled like that
+                var uid = request.uid ? request.uid : 0;
+                if(clientActivenessCache.get(uid) == undefined) {
+                    clientActivenessCache.set(uid, new CacheEntry(9999, 9999), cacheSetErrorCallback);
+                }
                 var lastCacheEntry = clientActivenessCache.get(uid);
                 if (lastCacheEntry == undefined) {
                     console.error("Trying to update data of unlogged user. This is a sign of very serious consistency problem")
                 } else {
-                    utils.verifyToken(request.authentication, function (success, data) {
+                    utils.verifyToken(request.Authorization, function (success, data) {
                     if(success) {
                         if (request.type == 'keepAlive') {
                             console.log("Received keep alive");
