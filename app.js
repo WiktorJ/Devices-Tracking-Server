@@ -66,18 +66,18 @@ if (ENVIORMENT != 'performance-tests') {
          * @description Invokes authorization check.
          */
         function (req, res, next) {
-        var token = req.headers.authorization;
-        if (!token) {
-            res.status(401).send("You have to login first");
-        }
-        utils.verifyToken(token, function (success, data) {
-            if (success) {
-                next()
-            } else {
-                res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+            var token = req.headers.authorization;
+            if (!token) {
+                res.status(401).send("You have to login first");
             }
+            utils.verifyToken(token, function (success, data) {
+                if (success) {
+                    next()
+                } else {
+                    res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+                }
+            });
         });
-    });
 }
 
 // additional custom scripts
