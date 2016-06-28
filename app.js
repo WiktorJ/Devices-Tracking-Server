@@ -42,7 +42,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 if (ENVIORMENT != 'performance-tests') {
     app.use(function (req, res, next) {
-        console.log("ENV: ", app.get('env'));
         var token = req.headers.authorization;
         if (!token) {
             res.status(401).send("You have to login first");
