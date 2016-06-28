@@ -1,3 +1,12 @@
+/**
+ * @file Defines utilities functions used for accessing database.
+ */
+
+/**
+ * @module persistence/mognoUtils
+ * @description Module implementing database utils.
+ */
+
 var path = require('path');
 var config = require(path.join(__base, 'config/index'));
 var MongoClient = require('mongodb').MongoClient;
@@ -12,6 +21,12 @@ MongoClient.connect(config.mongoAddress)
 });
 
 var utils = {};
+
+/**
+ * @function getDb
+ * @returns {Object} Database representation.
+ * @description Returns database instance.
+ */
 utils.getDb = function () {
         return db;
     };

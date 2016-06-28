@@ -27,5 +27,8 @@
     "passport-google-token": "^0.1.2",
     "serve-favicon": "~2.3.0",
     "ws": "^0.4.32"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.4.0"
   }
 }

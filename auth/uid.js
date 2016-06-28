@@ -1,9 +1,22 @@
+/**
+ * @file Defines utilities functions used for processing authentication requests.
+ */
+
+/**
+ * @module auth/uid
+ * @description Module implementing authentication utils.
+ */
+
 var path = require('path');
 var mongoUtils = require(path.join(__base, 'persistence/mongoUtils'));
 var config = require(path.join(__base, 'config/index'));
 var uid = {};
 
-
+/**
+ * @function findNextUid
+ * @param fn {Function} Callback function to invoke.
+ * @description Finds the lowest User ID to map new user's e-mail address. Takes care of no User ID duplicates.
+ */
 uid.findNextUid = function (fn) {
     var nextUid = -1;
 
@@ -25,6 +38,12 @@ uid.findNextUid = function (fn) {
     });
 };
 
+/**
+ * @function mapEmail
+ * @param email {String} E-mail address of signed in user.
+ * @param fn {Function} Callback function to invoke.
+ * @description Maps e-mail address submitted with login request to User ID. Returns User ID saved in database or creates and persists new mapping between e-mail address and USer ID (for the first signing in).
+ */
 uid.mapEmail = function (email, fn) {
     var topContext = this;
     

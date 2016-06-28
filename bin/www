@@ -1,45 +1,43 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * @file Defines core functionality of HTTP Server.
  */
 
+/**
+ * @module bin/www
+ * @descriptions Module running server.
+ */
+
+/* Module dependencies. */
 var app = require('../app');
 var debug = require('debug')('Server:server');
 var http = require('http');
 var WebSocketServer = require('ws').Server;
-/**
- * Get port from environment and store in Express.
- */
 
+/* Get port from environment and store in Express. */
 var port = normalizePort(process.env.PORT || '3000');
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = '/home/wiktor/Studies/TAI/Simple-Device-Tracking-System-d68520092ec1.json';
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
+/* Create HTTP server. */
 var server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+/* Listen on provided port, on all network interfaces. */
 require('../domain/location/webSockets')(new WebSocketServer({server: server, path: "/location"}));
 console.log("Listening on port: " + port + ".");
 server.listen(port);
-
-
-
 
 server.on('error', onError);
 server.on('listening', onListening);
 
 /**
- * Normalize a port into a number, string, or false.
+ * @function normalizePort
+ * @param val {String} Port number value.
+ * @returns {Number or String or False} Returns String if the argument is not a number. Returns Number if the argument is a number, at least 0. Returns False otherwise.
+ * @description Normalizes a port into a number, string or false.
  */
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
@@ -57,9 +55,10 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * @function onError
+ * @param error {Object} Object representing error occurred while server processing.
+ * @description Event listener for HTTP Server "error" event..
  */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -85,9 +84,9 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * @function onListening
+ * @description Event listener for HTTP Server "listening" event.
  */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
