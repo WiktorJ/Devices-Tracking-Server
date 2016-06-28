@@ -14,6 +14,8 @@ var utils = require(path.join(__base, 'utils/index'));
 
 var app = express();
 
+ENVIORMENT = app.get('env');
+
 
 // add response headers, which allow to communicate between different hosts.
 app.use(function (req, res, next) {
@@ -34,26 +36,26 @@ app.use(function (req, res, next) {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-// app.use(cookieParser());
-// app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(function (req, res, next) {
-    var token = req.headers.authorization;
-    utils.verifyToken(token, function (success, data) {
-        if (success) {
-            next()
-        } else {
-            res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+
+if (ENVIORMENT != 'performance-tests') {
+    app.use(function (req, res, next) {
+        console.log("ENV: ", app.get('env'));
+        var token = req.headers.authorization;
+        if (!token) {
+            res.status(401).send("You have to login first");
         }
+        utils.verifyToken(token, function (success, data) {
+            if (success) {
+                next()
+            } else {
+                res.status(401).send("\"{\"reason\": \"Google sign in token verification failed\"}\"")
+            }
+        });
     });
-});
+}
 
 // additional custom scripts
 app.use('/auth', auth);
