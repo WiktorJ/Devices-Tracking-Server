@@ -22,23 +22,25 @@ var auth = {};
 auth.authorizeUID = function (email, uid, fn) {
     mongoUtils.getDb().collection(config.uidCollection)
         .find({'email': email}).toArray(function (err, result) {
-            if(err) {
-                console.log("Error while finding in collection for user: " + email + ". ", err);
+
+        if (ENVIORMENT === 'performance-tests') {
+            fn(true);
+        } else if (err) {
+            console.log("Error while finding in collection for user: " + email + ". ", err);
+            fn(false);
+        } else {
+            if (result.length != 1) {
                 fn(false);
             }
             else {
-                if (result.length != 1) {
-                    fn(false);
+                if (result[0].uid == uid) {
+                    fn(true);
                 }
                 else {
-                    if (result[0].uid == uid) {
-                        fn(true);
-                    }
-                    else {
-                        fn(false);
-                    }
+                    fn(false);
                 }
             }
+        }
     })
 };
 

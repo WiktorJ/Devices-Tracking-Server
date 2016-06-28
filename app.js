@@ -20,6 +20,8 @@ var utils = require(path.join(__base, 'utils/index'));
 
 var app = express();
 
+ENVIORMENT = app.get('env');
+
 
 // add response headers, which allow to communicate between different hosts.
 app.use(
@@ -53,16 +55,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(
-    /**
-     * @callback callback
-     * @param req {Object} Standard express parameter representing HTTP request.
-     * @param res {Object} Standard express parameter representing HTTP response.
-     * @param next {Object} Standard express parameter allowing to pass request processing flow.
-     * @description Invokes authorization check.
-     */
-    function (req, res, next) {
+
+if (ENVIORMENT != 'performance-tests') {
+    app.use(
+        /**
+         * @callback callback
+         * @param req {Object} Standard express parameter representing HTTP request.
+         * @param res {Object} Standard express parameter representing HTTP response.
+         * @param next {Object} Standard express parameter allowing to pass request processing flow.
+         * @description Invokes authorization check.
+         */
+        function (req, res, next) {
         var token = req.headers.authorization;
+        if (!token) {
+            res.status(401).send("You have to login first");
+        }
         utils.verifyToken(token, function (success, data) {
             if (success) {
                 next()
@@ -71,6 +78,7 @@ app.use(
             }
         });
     });
+}
 
 // additional custom scripts
 app.use('/auth', auth);
@@ -95,6 +103,7 @@ app.use(
 
 
 // error handlers
+
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
